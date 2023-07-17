@@ -26,7 +26,14 @@ BONUS 3:
 Aggiungere bottoni di start/stop e di inversione del meccanismo di autoplay.
 */
 
-const images = [
+// Dichiaro varibili
+const upInput = document.querySelector("#up-input");
+const downInput = document.querySelector("#down-input");
+const carouselImageBox = document.querySelector("#carousel-image-box");
+const thumbnailImageBox = document.querySelector("#thumbnail-image-box");
+let currentCarousel = 0;
+
+const imagesList = [
     {
         image: 'img/01.webp',
         title: 'Marvel\'s Spiderman Miles Morale',
@@ -49,3 +56,78 @@ const images = [
         text: 'Marvel\'s Avengers is an epic, third-person, action-adventure game that combines an original, cinematic story with single-player and co-operative gameplay.',
     }
 ];
+
+createAllElement(); // creo tutti gli elementi
+
+const carouselBox = document.querySelectorAll(".carousel-element-box");
+
+// Mostro il primo elemento
+for (let i = 0; i < carouselBox.length; i++) {
+
+    if (i === 0) {
+        carouselBox[i].classList.add("active");
+    }
+}
+
+upInput.addEventListener("click", upInputClick); // Pulsante scorro verso l'alto
+downInput.addEventListener("click", downInputClick); // Pulsante scorro verso il basso
+
+
+// Creo tutti gli elementi
+function createAllElement() {
+    for (let i = 0; i < imagesList.length; i++) {
+
+        const carouselElementBox = document.createElement("div");
+        carouselElementBox.classList.add("position-absolute", "top-0", "start-0", "carousel-element-box");
+    
+        const carouselImage = document.createElement("img");
+        carouselImage.src = imagesList[i].image;
+        carouselImage.alt = imagesList[i].title;
+    
+        const carouselTextBox = document.createElement("div");
+        carouselTextBox.classList.add("position-absolute", "bottom-0", "end-0", "carousel-text-box");
+    
+        const carouselTitle = document.createElement("h3");
+        carouselTitle.textContent = imagesList[i].title;
+    
+        const carouselText = document.createElement("p");
+        carouselText.textContent = imagesList[i].text;
+
+        printAllElement(carouselImageBox, carouselElementBox, carouselTextBox, carouselImage, carouselTitle, carouselText); // stampo gil elementi
+    }    
+}
+
+// Stampo tutti gli elementi a schermo
+function printAllElement(carouselImageBox, carouselElementBox, carouselTextBox, carouselImage, carouselTitle, carouselText) {
+    carouselImageBox.append(carouselElementBox);
+    carouselElementBox.append(carouselImage);
+    carouselElementBox.append(carouselTextBox);
+    carouselTextBox.append(carouselTitle);
+    carouselTextBox.append(carouselText);
+}
+
+// Pulsante scorro verso l'alto
+function upInputClick() {
+    carouselBox[currentCarousel].classList.remove("active");
+
+    currentCarousel++;
+
+    if (currentCarousel > carouselBox.length - 1) {
+        currentCarousel = 0;
+    }
+
+    carouselBox[currentCarousel].classList.add("active");
+}
+
+// Pulsante scorro verso il basso
+function downInputClick() {
+    carouselBox[currentCarousel].classList.remove("active");
+
+    currentCarousel--;
+
+    if (currentCarousel < 0) {
+        currentCarousel = carouselBox.length - 1;
+    }
+
+    carouselBox[currentCarousel].classList.add("active");
+}

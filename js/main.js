@@ -59,42 +59,48 @@ const imagesList = [
 
 createAllElement(); // creo tutti gli elementi
 
+createThumbnail(); // creo le miniature
+
 const carouselBox = document.querySelectorAll(".carousel-element-box");
+const thumbnailImage = document.querySelectorAll(".thumbnail-image");
 
-// Mostro il primo elemento
-for (let i = 0; i < carouselBox.length; i++) {
-
+// Rendo attivo il primo elemento e la prima miniatura
+carouselBox.forEach((singleElement, i) => {
     if (i === 0) {
         carouselBox[i].classList.add("active");
+        thumbnailImage[i].classList.add("active");
     }
-}
+});
 
 upInput.addEventListener("click", upInputClick); // Pulsante scorro verso l'alto
 downInput.addEventListener("click", downInputClick); // Pulsante scorro verso il basso
 
-
 // Creo tutti gli elementi
 function createAllElement() {
-    for (let i = 0; i < imagesList.length; i++) {
 
+    const idNumber = createIdNumber();
+
+    imagesList.forEach((singleCarouselElement, i) => {
         const carouselElementBox = document.createElement("div");
         carouselElementBox.classList.add("position-absolute", "top-0", "start-0", "carousel-element-box");
-    
+
         const carouselImage = document.createElement("img");
         carouselImage.src = imagesList[i].image;
         carouselImage.alt = imagesList[i].title;
-    
+
         const carouselTextBox = document.createElement("div");
         carouselTextBox.classList.add("position-absolute", "bottom-0", "end-0", "carousel-text-box");
-    
+
         const carouselTitle = document.createElement("h3");
         carouselTitle.textContent = imagesList[i].title;
-    
+
         const carouselText = document.createElement("p");
         carouselText.textContent = imagesList[i].text;
 
+        carouselElementBox.setAttribute("id", idNumber[i]);
+
         printAllElement(carouselImageBox, carouselElementBox, carouselTextBox, carouselImage, carouselTitle, carouselText); // stampo gil elementi
-    }    
+    });
 }
 
 // Stampo tutti gli elementi a schermo
@@ -106,9 +112,58 @@ function printAllElement(carouselImageBox, carouselElementBox, carouselTextBox, 
     carouselTextBox.append(carouselText);
 }
 
+// Creo le miniature
+function createThumbnail() {
+
+    const idNumber = createIdNumber();
+
+    imagesList.forEach((singleThumbnailElement, i) => {
+        const thumbnailImage = document.createElement("img");
+        thumbnailImage.classList.add("thumbnail-image");
+        thumbnailImage.src = imagesList[i].image;
+        thumbnailImage.alt = imagesList[i].title;
+
+        thumbnailImage.setAttribute("id", idNumber[i]);
+
+        thumbnailImageBox.append(thumbnailImage);
+
+        thumbnailImage.addEventListener("click", thumbnailClicked); // attivo la funzione al click della miniatura
+    });
+}
+
+// Crea un array di numeri da associare agli id
+function createIdNumber() {
+    let idArray = [];
+
+    imagesList.forEach((number, i) => {
+        idArray.push(`_${i}`);
+    });
+
+    return idArray;
+}
+
+// Click della miniatura
+function thumbnailClicked() {
+    // Scorro su entrambi gli array per trovare le corrispondenze tramite gli id
+    carouselBox.forEach((singleCarouselElement, i) => {
+        thumbnailImage[i].classList.remove("active");
+        carouselBox[i].classList.remove("active");
+
+        thumbnailImage.forEach((singleThumbnailElement, z) => {
+            if (this.id === carouselBox[z].id) {
+                carouselBox[z].classList.add("active");
+                this.classList.add("active");
+
+                currentCarousel = z;
+            }
+        });
+    });
+}
+
 // Pulsante scorro verso l'alto
 function upInputClick() {
     carouselBox[currentCarousel].classList.remove("active");
+    thumbnailImage[currentCarousel].classList.remove("active");
 
     currentCarousel++;
 
@@ -117,11 +172,13 @@ function upInputClick() {
     }
 
     carouselBox[currentCarousel].classList.add("active");
+    thumbnailImage[currentCarousel].classList.add("active");
 }
 
 // Pulsante scorro verso il basso
 function downInputClick() {
     carouselBox[currentCarousel].classList.remove("active");
+    thumbnailImage[currentCarousel].classList.remove("active");
 
     currentCarousel--;
 
@@ -130,4 +187,5 @@ function downInputClick() {
     }
 
     carouselBox[currentCarousel].classList.add("active");
+    thumbnailImage[currentCarousel].classList.add("active");
 }

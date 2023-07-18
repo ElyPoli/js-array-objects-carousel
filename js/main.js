@@ -32,6 +32,8 @@ const downInput = document.querySelector("#down-input");
 const carouselImageBox = document.querySelector("#carousel-image-box");
 const thumbnailImageBox = document.querySelector("#thumbnail-image-box");
 let currentCarousel = 0;
+let timeToClick = new Date();
+let autoplayStart = 0;
 
 const imagesList = [
     {
@@ -158,6 +160,8 @@ function thumbnailClicked() {
             }
         });
     });
+
+    autoplayStart = 0;
 }
 
 // Pulsante scorro verso l'alto
@@ -173,6 +177,7 @@ function upInputClick() {
 
     carouselBox[currentCarousel].classList.add("active");
     thumbnailImage[currentCarousel].classList.add("active");
+    autoplayStart = 0;
 }
 
 // Pulsante scorro verso il basso
@@ -188,4 +193,19 @@ function downInputClick() {
 
     carouselBox[currentCarousel].classList.add("active");
     thumbnailImage[currentCarousel].classList.add("active");
+    autoplayStart = 0;
 }
+
+// Aggiorno il tempo di attesa del click
+setInterval(function () {
+    timeToClick = new Date();
+    autoplayStart++;
+}, 1000);
+
+// Autoplay
+const autoplay = setInterval(function () {
+    if (autoplayStart >= 5) {
+        upInputClick(); // Pulsante scorro verso l'alto
+        autoplayStart = 0;
+    }
+}, 1000);

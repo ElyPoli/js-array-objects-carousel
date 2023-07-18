@@ -26,6 +26,8 @@ BONUS 3:
 Aggiungere bottoni di start/stop e di inversione del meccanismo di autoplay.
 */
 
+"use strict";
+
 // Dichiaro varibili
 const upInput = document.querySelector("#up-input");
 const downInput = document.querySelector("#down-input");
@@ -132,7 +134,7 @@ function createThumbnail() {
         thumbnailImage.src = imagesList[i].image;
         thumbnailImage.alt = imagesList[i].title;
 
-        thumbnailImage.setAttribute("id", idNumber[i]);
+        thumbnailImage.dataset.thumbCode = idNumber[i]
 
         thumbnailImageBox.append(thumbnailImage);
 
@@ -153,13 +155,13 @@ function createIdNumber() {
 
 // Click della miniatura
 function thumbnailClicked() {
-    // Scorro su entrambi gli array per trovare le corrispondenze tramite gli id
+    // Scorro su entrambi gli array per trovare le corrispondenze
     carouselBox.forEach((singleCarouselElement, i) => {
         thumbnailImage[i].classList.remove("active");
         carouselBox[i].classList.remove("active");
 
         thumbnailImage.forEach((singleThumbnailElement, z) => {
-            if (this.id === carouselBox[z].id) {
+            if (this.dataset.thumbCode === carouselBox[z].id) {
                 carouselBox[z].classList.add("active");
                 this.classList.add("active");
 

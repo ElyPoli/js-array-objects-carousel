@@ -29,11 +29,16 @@ Aggiungere bottoni di start/stop e di inversione del meccanismo di autoplay.
 // Dichiaro varibili
 const upInput = document.querySelector("#up-input");
 const downInput = document.querySelector("#down-input");
+const startInput = document.querySelector("#start-input");
+const stopInput = document.querySelector("#stop-input");
+const reverseInput = document.querySelector("#reverse-input");
 const carouselImageBox = document.querySelector("#carousel-image-box");
 const thumbnailImageBox = document.querySelector("#thumbnail-image-box");
+let reverse = false;
 let currentCarousel = 0;
 let timeToClick = new Date();
 let autoplayStart = 0;
+let autoplay;
 
 const imagesList = [
     {
@@ -62,6 +67,8 @@ const imagesList = [
 createAllElement(); // creo tutti gli elementi
 
 createThumbnail(); // creo le miniature
+
+autoplayCreate() // autoplay
 
 const carouselBox = document.querySelectorAll(".carousel-element-box");
 const thumbnailImage = document.querySelectorAll(".thumbnail-image");
@@ -203,9 +210,34 @@ setInterval(function () {
 }, 1000);
 
 // Autoplay
-const autoplay = setInterval(function () {
-    if (autoplayStart >= 5) {
-        upInputClick(); // Pulsante scorro verso l'alto
-        autoplayStart = 0;
-    }
-}, 1000);
+function autoplayCreate() {
+    autoplay = setInterval(function () {
+
+        if(reverse === false) {
+            if (autoplayStart >= 5) {
+                upInputClick(); // Pulsante scorro verso l'alto
+                autoplayStart = 0;
+            }    
+        } else {
+            if (autoplayStart >= 5) {
+                downInputClick(); // Pulsante scorro verso il basso
+                autoplayStart = 0;
+            }    
+        }
+    }, 1000);    
+}
+
+// Reverse autoplay
+reverseInput.addEventListener("click", function() {
+    reverse = true;
+})
+
+// Stop autoplay
+stopInput.addEventListener("click", function() {
+    clearInterval(autoplay);    
+})
+
+// Play autoplay
+startInput.addEventListener("click", function() {
+    autoplayCreate(); // autoplay
+})
